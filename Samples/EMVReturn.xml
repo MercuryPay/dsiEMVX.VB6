@@ -1,0 +1,18 @@
+﻿<?xml version="1.0"?>
+<TStream>
+  <Transaction>
+    <HostOrIP>127.0.0.1</HostOrIP>
+    <IpPort>9000</IpPort>
+    <MerchantID>337234005</MerchantID>
+    <TranCode>EMVReturn</TranCode>
+    <SecureDevice>EMV_VX805_MERCURY</SecureDevice>
+    <ComPort>9</ComPort>
+    <InvoiceNo>04112017024737246</InvoiceNo>
+    <RefNo>04112017024737246</RefNo>
+    <Purchase>8.42</Purchase>
+    <OperatorID>test</OperatorID>
+    <SequenceNo>0010010000</SequenceNo>
+    <RecordNo>RecordNumberRequested</RecordNo>
+    <Frequency>OneTime</Frequency>
+  </Transaction>
+</TStream>

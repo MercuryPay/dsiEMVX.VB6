@@ -1,0 +1,14 @@
+﻿<?xml version="1.0"?>
+<TStream>
+  <Admin>
+    <HostOrIP>127.0.0.1</HostOrIP>
+    <IpPort>9000</IpPort>
+    <MerchantID>337234005</MerchantID>
+    <TranCode>EMVParamDownload</TranCode>
+    <SecureDevice>EMV_VX805_MERCURY</SecureDevice>
+    <ComPort>9</ComPort>
+    <InvoiceNo>1</InvoiceNo>
+    <RefNo>1</RefNo>
+    <SequenceNo>0010010000</SequenceNo>
+  </Admin>
+</TStream>
