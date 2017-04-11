@@ -34,93 +34,48 @@ Begin VB.Form Form1
       EndProperty
       Height          =   615
       Left            =   9120
-      TabIndex        =   18
+      TabIndex        =   10
       Top             =   8160
       Width           =   3255
    End
    Begin VB.TextBox txtResponse 
-      Height          =   5295
+      Height          =   5895
       Left            =   6360
       MultiLine       =   -1  'True
-      TabIndex        =   17
-      Top             =   2640
+      TabIndex        =   9
+      Top             =   2040
       Width           =   6015
    End
    Begin VB.TextBox txtRequest 
-      Height          =   5295
+      Height          =   5895
       Left            =   120
       MultiLine       =   -1  'True
-      TabIndex        =   16
-      Top             =   2640
+      TabIndex        =   8
+      Top             =   2040
       Width           =   6015
    End
    Begin VB.Frame Frame1 
-      Height          =   2415
+      Height          =   1695
       Left            =   120
       TabIndex        =   0
       Top             =   120
       Width           =   12255
       Begin VB.TextBox txtComPort 
          Height          =   325
-         Left            =   6840
-         TabIndex        =   20
-         Top             =   1920
+         Left            =   3480
+         TabIndex        =   11
+         Top             =   1200
          Width           =   3250
-      End
-      Begin VB.CheckBox chkTargetGift 
-         Caption         =   "Target Gift"
-         Height          =   375
-         Left            =   6840
-         TabIndex        =   19
-         Top             =   480
-         Width           =   1095
       End
       Begin VB.ComboBox cmbSecureDevice 
          Height          =   315
          Left            =   120
-         TabIndex        =   14
-         Top             =   1920
+         TabIndex        =   6
+         Top             =   1200
          Width           =   3250
       End
       Begin VB.ComboBox cmbMerchantID 
          Height          =   315
-         Left            =   6840
-         TabIndex        =   12
-         Top             =   1200
-         Width           =   3250
-      End
-      Begin VB.TextBox txtResponseTimeout 
-         Height          =   325
-         Left            =   3480
-         TabIndex        =   10
-         Top             =   1200
-         Width           =   3250
-      End
-      Begin VB.TextBox txtConnectTimeout 
-         Height          =   325
-         Left            =   120
-         TabIndex        =   8
-         Top             =   1200
-         Width           =   3250
-      End
-      Begin VB.CheckBox chkKeyedTransaction 
-         Caption         =   "Keyed Transaction"
-         Height          =   375
-         Left            =   9480
-         TabIndex        =   6
-         Top             =   480
-         Width           =   2655
-      End
-      Begin VB.CheckBox chkShowDialogs 
-         Caption         =   "Show Dialogs"
-         Height          =   375
-         Left            =   8040
-         TabIndex        =   5
-         Top             =   480
-         Width           =   1455
-      End
-      Begin VB.TextBox txtGIFTePayHostList 
-         Height          =   325
          Left            =   3480
          TabIndex        =   4
          Top             =   480
@@ -137,9 +92,9 @@ Begin VB.Form Form1
          Caption         =   "Com Port"
          Height          =   330
          Index           =   7
-         Left            =   6840
-         TabIndex        =   15
-         Top             =   1680
+         Left            =   3480
+         TabIndex        =   7
+         Top             =   960
          Width           =   3255
       End
       Begin VB.Label Label1 
@@ -147,41 +102,14 @@ Begin VB.Form Form1
          Height          =   330
          Index           =   5
          Left            =   120
-         TabIndex        =   13
-         Top             =   1680
+         TabIndex        =   5
+         Top             =   960
          Width           =   3255
       End
       Begin VB.Label Label1 
          Caption         =   "Merchant ID"
          Height          =   330
          Index           =   4
-         Left            =   6840
-         TabIndex        =   11
-         Top             =   960
-         Width           =   3255
-      End
-      Begin VB.Label Label1 
-         Caption         =   "Response Timeout"
-         Height          =   330
-         Index           =   3
-         Left            =   3480
-         TabIndex        =   9
-         Top             =   960
-         Width           =   3255
-      End
-      Begin VB.Label Label1 
-         Caption         =   "Connect Timeout"
-         Height          =   330
-         Index           =   2
-         Left            =   120
-         TabIndex        =   7
-         Top             =   960
-         Width           =   3255
-      End
-      Begin VB.Label Label1 
-         Caption         =   "GiftePay Host List"
-         Height          =   330
-         Index           =   1
          Left            =   3480
          TabIndex        =   3
          Top             =   240
@@ -232,7 +160,6 @@ End Sub
 
 Private Sub Form_Load()
     Me.SetupForm
-    Me.TargetEPayServer
     Set dsiEMVX = New DSIEMVXLib.dsiEMVX
 End Sub
 
@@ -244,13 +171,6 @@ Private Sub Exit_Click()
     Unload Me
 End Sub
 
-Private Sub chkTargetGift_Click()
-    Me.TargetEPayServer
-End Sub
-
-Private Sub chkKeyedTransaction_Click()
-    Me.UpdateRequest
-End Sub
 
 Private Sub cmbSecureDevice_Click()
     Me.UpdateRequest
@@ -281,12 +201,7 @@ End Sub
 
 Public Sub SetupForm()
     Me.txtNETePayHostList.Text = "127.0.0.1"
-    Me.txtGIFTePayHostList.Text = "g1.mercurycert.net;g2.mercurycert.net"
-    Me.chkTargetGift.Value = 0
-    Me.chkShowDialogs.Value = 0
-    Me.chkKeyedTransaction.Value = 0
     Me.txtComPort.Text = "9"
-    
     Me.cmbMerchantID.Clear
     
     For Each merchantID In merchantIDArray
@@ -305,15 +220,6 @@ Public Sub SetupForm()
     
 End Sub
 
-Public Sub TargetEPayServer()
-    If Me.chkTargetGift Then
-        Me.txtNETePayHostList.Enabled = False
-        Me.txtGIFTePayHostList.Enabled = True
-    Else
-        Me.txtNETePayHostList.Enabled = True
-        Me.txtGIFTePayHostList.Enabled = False
-    End If
-End Sub
 
 Public Sub LoadXMLRequest()
     Me.CommonDialog1.Filter = "XML (*.xml) | *.xml"
@@ -357,12 +263,8 @@ Public Sub UpdateRequest()
             doc.getElementsByTagName("ComPort").Item(0).Text = Me.txtComPort.Text
         End If
         
-        If doc.getElementsByTagName("AcctNo").length > 0 Then
-            If Me.chkKeyedTransaction.Value Then
-                doc.getElementsByTagName("AcctNo").Item(0).Text = "Prompt"
-            Else
-                doc.getElementsByTagName("AcctNo").Item(0).Text = "SecureDevice"
-            End If
+        If doc.getElementsByTagName("HostOrIP").length > 0 Then
+            doc.getElementsByTagName("HostOrIP").Item(0).Text = Me.txtNETePayHostList.Text
         End If
         
         Me.txtRequest.Text = doc.xml
@@ -372,17 +274,7 @@ Public Sub UpdateRequest()
 End Sub
 
 Public Function ProcessRequest(ByVal request As String) As String
-    
-    Dim processControl As Integer
-    processControl = CInt(Me.chkShowDialogs.Value)
-    
-    Dim hostlist As String
-    hostlist = Me.txtNETePayHostList.Text
-    
-    If Me.chkTargetGift Then
-        hostlist = Me.txtGIFTePayHostList.Text
-    End If
-    
+   
     Dim status As String
     Dim response As String
     response = dsiEMVX.ProcessTransaction(request)
@@ -390,3 +282,7 @@ Public Function ProcessRequest(ByVal request As String) As String
     ProcessRequest = response
     
 End Function
+
+Private Sub txtNETePayHostList_Change()
+    UpdateRequest
+End Sub
