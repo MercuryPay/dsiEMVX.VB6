@@ -152,7 +152,8 @@ Private Sub Form_Initialize()
         "337234005")
         
     secureDeviceArray = Array( _
-        "EMV_VX805_MERCURY" _
+        "EMV_IPP320_MERCURY" _
+        , "EMV_VX805_MERCURY" _
         , "EMV_ISC250_MERCURY")
            
 End Sub
