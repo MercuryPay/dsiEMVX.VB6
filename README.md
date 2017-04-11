@@ -1,4 +1,4 @@
-﻿# dsiEMVX.VB6
+# dsiEMVX.VB6
 
 * More documentation?  http://developer.vantiv.com
 * Questions?  integrationteam@mercurypay.com
