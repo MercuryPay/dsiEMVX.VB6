@@ -5,7 +5,7 @@
 * **Feature request?** Open an issue.
 * Feel like **contributing**?  Submit a pull request.
 
-##Overview
+## Overview
 
 This repository demonstrates how to integrate to an ActiveX control designed by Datacap Systems, Inc. and used to facilitate U.S. EMV payment card transactions.    This readme will provide information on how to setup the software and hardware to enable EMV transactions and to successfully send:
 
@@ -16,7 +16,7 @@ This repository demonstrates how to integrate to an ActiveX control designed by 
 
 ![dsiEMVX.VB6](https://github.com/mercurypay/dsiEMVX.VB6/blob/master/screenshot.PNG)
 
-##Prerequisites
+## Prerequisites
 
 Please contact your Developer Integrations Analyst for any questions about the below prerequisites.  Details are also outlined in the Datacap integration guide.
 
@@ -27,7 +27,7 @@ Please contact your Developer Integrations Analyst for any questions about the b
 * Test Chip or Dual Interface card.
 
 
-##Step 1: Device Configuration
+## Step 1: Device Configuration
 
 After installing the prerequisites we are now ready to configure the device for EMV capability.  If your device is already EMV capable you can skip this step but it never hurts to send an EMVParamDownload to be certain.  To do this we send an EMVParamDownload command using the dsiEMVX.  This command is sent when a device needs to be provisioned with EMV parameters for the first time or later in the event of parameter updates.
 
@@ -77,7 +77,7 @@ A successful response looks like:
 </RStream>
 ```
 
-##Step 2: Build the EMV Chip Card Transaction Types
+## Step 2: Build the EMV Chip Card Transaction Types
 
 Build XML commands and process with dsiEMVX object.  In the sample code we are going to build three different XML requests for the three different transaction types but we will only show the request for the EMV Sale transaction here.  Please see the sample code or the integration guide for further information on the other transaction types.
 
@@ -104,7 +104,7 @@ Below is a sample EMV Sale transaction.
 
 Send this request as we did the EMVParamDownload request above using the dsiEMVX and follow the prompts on the VX805.  You will be prompted to confirm the amount, insert, tap or swipe your test card, and this will be followed with an 'Approved' or 'Declined' message.
 
-##Step 3: Parse the XML Response
+## Step 3: Parse the XML Response
 
 Parse the XML Response using any mechanism that you are comfortable with.
 
@@ -193,7 +193,7 @@ Here is an EMVSale XML response.  The 'PrintData' is all you need to print your 
 
 ```
 
-###©2017 Mercury Payment Systems, LLC - all rights reserved.
+### ©2017 Mercury Payment Systems, LLC - all rights reserved.
 
 Disclaimer:
 This software and all specifications and documentation contained herein or provided to you hereunder (the "Software") are provided free of charge strictly on an "AS IS" basis. No representations or warranties are expressed or implied, including, but not limited to, warranties of suitability, quality, merchantability, or fitness for a particular purpose (irrespective of any course of dealing, custom or usage of trade), and all such warranties are expressly and specifically disclaimed. Mercury Payment Systems shall have no liability or responsibility to you nor any other person or entity with respect to any liability, loss, or damage, including lost profits whether foreseeable or not, or other obligation for any cause whatsoever, caused or alleged to be caused directly or indirectly by the Software. Use of the Software signifies agreement with this disclaimer notice.
