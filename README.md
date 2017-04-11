@@ -52,8 +52,10 @@ The request looks like this:
 Send a request by instantiating the dsiEMVX and then sending the command string using the ProcessTransaction method.
 
 ```
-dsiEMVX = new DSIEMVXLib.DsiEMVX();
-string response = dsiEMVX.ProcessTransaction(txtRequest.Text);
+Dim dsiEMVX
+Set dsiEMVX = New DSIEMVXLib.dsiEMVX
+Dim response As String
+response = dsiEMVX.ProcessTransaction(request)
 ```
 
 A successful response looks like:
@@ -104,70 +106,94 @@ Send this request as we did the EMVParamDownload request above using the dsiEMVX
 
 ##Step 3: Parse the XML Response
 
-Parse the XML Response using any mechanism you wish but in the sample code we use the XMLHelper.ParseXMLResponse(string xmlResponse) method which returns a Dictionary&lt;string, string&gt; making things a little easier to manage.
-
-The ParseXMLResponse method looks like the following:
-
-```
-Dictionary<string, string> dictionary = new Dictionary<string, string>();
-XmlDocument doc = new XmlDocument();
-doc.LoadXml(xmlResponse);
-TraverseNodes(doc.ChildNodes, dictionary);
-return dictionary;
-```
+Parse the XML Response using any mechanism that you are comfortable with.
 
 Approved transactions will have a CmdStatus equal to "Approved" or "Success".
 
-Here is the response to the above EMVSale transaction.  You will see that this is an Error which is expected at this time when hitting the Mercury platform.  The 'PrintData' is all you need to print your receipts (simply parse out and print the values between the &lt;LineN&gt;. tags) as all of the required EMV receipt information is supplied.
+Here is an EMVSale XML response.  The 'PrintData' is all you need to print your receipts (simply parse out and print the values between the &lt;LineN&gt;. tags) as all of the required EMV receipt information is supplied.
 
 ```
 <?xml version="1.0"?>
 <RStream>
 	<CmdResponse>
-		<ResponseOrigin>Server</ResponseOrigin>
-		<DSIXReturnCode>100201</DSIXReturnCode>
-		<CmdStatus>Error</CmdStatus>
-		<TextResponse>Invalid Field - Transaction Type</TextResponse>
+		<ResponseOrigin>Processor</ResponseOrigin>
+		<DSIXReturnCode>000000</DSIXReturnCode>
+		<CmdStatus>Approved</CmdStatus>
+		<TextResponse>AP*</TextResponse>
 		<SequenceNo>0010010000</SequenceNo>
 		<UserTrace></UserTrace>
 	</CmdResponse>
 	<TranResponse>
+		<MerchantID>337234005</MerchantID>
+		<AcctNo>************0010</AcctNo>
 		<CardType>VISA</CardType>
 		<TranCode>EMVSale</TranCode>
+		<AuthCode>28935A</AuthCode>
+		<CaptureStatus>Captured</CaptureStatus>
+		<RefNo>1001</RefNo>
+		<InvoiceNo>04112017024737246</InvoiceNo>
+		<OperatorID>test</OperatorID>
 		<Amount>
-			<Purchase>1.11</Purchase>
+			<Purchase>8.42</Purchase>
+			<Authorize>8.42</Authorize>
 		</Amount>
+		<AcqRefData>aAb314282069480098c1234d e000</AcqRefData>
+		<ProcessData>|00|510100500000</ProcessData>
+		<RecordNo>saVuy8o9fHi5D3NZFbCwIAfAdGdg6NvefQK7VSGDaCkiEgUQFSIQGWig</RecordNo>
+		<EntryMethod>CHIP</EntryMethod>
+		<Date>04/11/2017</Date>
+		<Time>16:00:55</Time>
+		<ApplicationLabel>Visa Credit</ApplicationLabel>
+		<AID>A0000000031010</AID>
+		<TVR>0000008000</TVR>
+		<IAD>06010A03602400</IAD>
+		<TSI>E800</TSI>
+		<ARC>00</ARC>
+		<CVM>SIGN</CVM>
 	</TranResponse>
 	<PrintData>
 		<Line1>.MERCHANT ID: 337234005</Line1>
-		<Line2>.</Line2>
-		<Line3>.                  SALE                  </Line3>
-		<Line4>.</Line4>
-		<Line5>.************0010</Line5>
-		<Line6>.VISA                 ENTRY METHOD: CHIP</Line6>
-		<Line7>.DATE: 05/19/2015  TIME: 21:31:40</Line7>
-		<Line8>.</Line8>
-		<Line9>.INVOICE: 1                              </Line9>
-		<Line10>.</Line10>
-		<Line11>.AMOUNT                       USD$ 1.11</Line11>
-		<Line12>.                            ==========</Line12>
-		<Line13>.TOTAL                        USD$ 1.11</Line13>
-		<Line14>.</Line14>
-		<Line15>.        TRANSACTION NOT COMPLETED       </Line15>
-		<Line16>.</Line16>
-		<Line17>.Application Label: Visa Credit</Line17>
-		<Line18>.AID: A0000000031010</Line18>
-		<Line19>.TVR: 0000008000</Line19>
-		<Line20>.IAD: 06010A03250000</Line20>
-		<Line21>.TSI: E800</Line21>
-		<Line22>.ARC: Z3</Line22>
-		<Line23>.CVM: NONE</Line23>
+		<Line2>.CLERK ID: test</Line2>
+		<Line3>.</Line3>
+		<Line4>.                  SALE                  </Line4>
+		<Line5>.</Line5>
+		<Line6>.VISA                   ************0010</Line6>
+		<Line7>.ENTRY METHOD: CHIP</Line7>
+		<Line8>.DATE: 04/11/2017  TIME: 16:00:55</Line8>
+		<Line9>.</Line9>
+		<Line10>.INVOICE: 04112017024737246</Line10>
+		<Line11>.REFERENCE: 1001</Line11>
+		<Line12>.AUTH CODE: 28935A</Line12>
+		<Line13>.</Line13>
+		<Line14>.AMOUNT                       USD$ 8.42</Line14>
+		<Line15>.                            ==========</Line15>
+		<Line16>.TOTAL                        USD$ 8.42</Line16>
+		<Line17>.</Line17>
+		<Line18>.          APPROVED - THANK YOU          </Line18>
+		<Line19>.</Line19>
+		<Line20>.I AGREE TO PAY THE ABOVE TOTAL AMOUNT</Line20>
+		<Line21>.ACCORDING TO CARD ISSUER AGREEMENT</Line21>
+		<Line22>.(MERCHANT AGREEMENT IF CREDIT VOUCHER)</Line22>
+		<Line23>.</Line23>
+		<Line24>.</Line24>
+		<Line25>.</Line25>
+		<Line26>.x_______________________________________</Line26>
+		<Line27>.          Cardholder Signature          </Line27>
+		<Line28>.</Line28>
+		<Line29>.</Line29>
+		<Line30>.APPLICATION LABEL: Visa Credit</Line30>
+		<Line31>.AID: A0000000031010</Line31>
+		<Line32>.TVR: 0000008000</Line32>
+		<Line33>.IAD: 06010A03602400</Line33>
+		<Line34>.TSI: E800</Line34>
+		<Line35>.ARC: 00</Line35>
+		<Line36>.CVM: SIGN</Line36>
 	</PrintData>
 </RStream>
 
 ```
 
-###©2015 Mercury Payment Systems, LLC - all rights reserved.
+###©2017 Mercury Payment Systems, LLC - all rights reserved.
 
 Disclaimer:
 This software and all specifications and documentation contained herein or provided to you hereunder (the "Software") are provided free of charge strictly on an "AS IS" basis. No representations or warranties are expressed or implied, including, but not limited to, warranties of suitability, quality, merchantability, or fitness for a particular purpose (irrespective of any course of dealing, custom or usage of trade), and all such warranties are expressly and specifically disclaimed. Mercury Payment Systems shall have no liability or responsibility to you nor any other person or entity with respect to any liability, loss, or damage, including lost profits whether foreseeable or not, or other obligation for any cause whatsoever, caused or alleged to be caused directly or indirectly by the Software. Use of the Software signifies agreement with this disclaimer notice.
